@@ -243,4 +243,15 @@ describe('LinkedList', () => {
     expect(linkedList.head.value).toBe(1);
     expect(linkedList.tail.value).toBe(3);
   });
+
+  it('should convert node to string reversingly', () => {
+    const linkedList = new LinkedList();
+
+    linkedList.append(1);
+    linkedList.append(2);
+    linkedList.append(3);
+    linkedList.append(4);
+
+    expect(LinkedList.toStringReversingly(linkedList.head)).toBe('4321');
+  });
 });

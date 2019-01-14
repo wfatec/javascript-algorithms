@@ -209,6 +209,28 @@ export default class LinkedList {
   }
 
   /**
+   * @param {linkedListNode}
+   * @return {string}
+   */
+  static toStringReversingly(linkedListNode) {
+    let reversedString = '';
+
+    function recursiveFunc(currentNode) {
+      if (currentNode) {
+        if (currentNode.next) {
+          recursiveFunc(currentNode.next);
+        }
+
+        reversedString += currentNode.value;
+      }
+    }
+
+    recursiveFunc(linkedListNode);
+
+    return reversedString;
+  }
+
+  /**
    * Reverse a linked list.
    * @returns {LinkedList}
    */
