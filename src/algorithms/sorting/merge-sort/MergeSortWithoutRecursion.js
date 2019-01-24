@@ -10,50 +10,57 @@ export default class MergeSortWithoutRecursion extends Sort {
       return originalArray;
     }
 
-    // Split array on two halves.
-    const middleIndex = Math.floor(originalArray.length / 2);
-    const leftArray = originalArray.slice(0, middleIndex);
-    const rightArray = originalArray.slice(middleIndex, originalArray.length);
+    let step = 1;
+    let left;
+    let right;
 
-    // Sort two halves of split array
-    const leftSortedArray = this.sort(leftArray);
-    const rightSortedArray = this.sort(rightArray);
+    while (step < originalArray.length) {
+      left = 0;
+      right = step;
 
-    // Merge two sorted arrays into one.
-    return this.mergeSortedArrays(leftSortedArray, rightSortedArray);
-  }
-
-  mergeSortedArrays(leftArray, rightArray) {
-    let sortedArray = [];
-
-    // In case if arrays are not of size 1.
-    while (leftArray.length && rightArray.length) {
-      let minimumElement = null;
-
-      // Find minimum element of two arrays.
-      if (this.comparator.lessThanOrEqual(leftArray[0], rightArray[0])) {
-        minimumElement = leftArray.shift();
-      } else {
-        minimumElement = rightArray.shift();
+      while (right + step < originalArray.length) {
+        this.mergeArrays(originalArray, left, left + step, right, right + step);
+        left = right + step;
+        right = left + step;
       }
 
-      // Call visiting callback.
-      this.callbacks.visitingCallback(minimumElement);
-
-      // Push the minimum element of two arrays to the sorted array.
-      sortedArray.push(minimumElement);
+      if (right < originalArray.length) {
+        this.mergeArrays(originalArray, left, left + step, right, originalArray.length);
+      }
+      step *= 2;
     }
 
-    // If one of two array still have elements we need to just concatenate
-    // this element to the sorted array since it is already sorted.
-    if (leftArray.length) {
-      sortedArray = sortedArray.concat(leftArray);
+    return originalArray;
+  }
+
+  mergeArrays(originalArray, startLeft, stopLeft, startRight, stopRight) {
+    const arr = originalArray;
+    const rightArr = new Array(stopRight - startRight + 1);
+    const leftArr = new Array(stopLeft - startRight + 1);
+    let k = startRight;
+
+    for (let i = 0; i < (rightArr.length - 1); i += 1) {
+      rightArr[i] = arr[k];
+      k += 1;
+    }
+    k = startLeft;
+    for (let i = 0; i < (leftArr.length - 1); i += 1) {
+      leftArr[i] = arr[k];
+      k += 1;
     }
 
-    if (rightArray.length) {
-      sortedArray = sortedArray.concat(rightArray);
+    rightArr[rightArr.length - 1] = Infinity; // 哨兵值
+    leftArr[leftArr.length - 1] = Infinity; // 哨兵值
+    let m = 0;
+    let n = 0;
+    for (let i = startLeft; i < stopRight; i += 1) {
+      if (leftArr[m] <= rightArr[n]) {
+        arr[i] = leftArr[m];
+        m += 1;
+      } else {
+        arr[i] = rightArr[n];
+        n += 1;
+      }
     }
-
-    return sortedArray;
   }
 }

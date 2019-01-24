@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./src/**/*.js",
-    "test": "jest ./src/data-structures/linked-list",
+    "test": "jest ./src/algorithms/sorting/merge-sort",
     "ci": "npm run lint && npm run test -- --coverage"
   },
   "pre-commit": [
